@@ -195,7 +195,7 @@
 
         <!--If rejected-->
         {% elseif data['quoteGranted'] == "Rejected" %}
-          <form class="form" action="application-details-adjust?quoteGranted=Rejected" method="post">
+          <form class="form" action="application-details?appAssigned=yes&cwAppStatus=In progress&quoteGranted=Rejected" method="post">
 
           <h1 class="govuk-heading-xl">Reason for decision</h1>
           

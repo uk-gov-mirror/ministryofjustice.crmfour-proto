@@ -94,7 +94,7 @@
         <!--Payment summmary-->
         <p class="govuk-body-m">
           {% if data['paymentType'] == "Non-standard magistrates'" %}
-            <strong> Payment type: </strong>Non-standard magistrates' - appeal<br>
+            <strong> Payment type: </strong>Non-standard magistrates - appeal<br>
             {%else %}
             <strong> Payment type: </strong>Assigned counsel - appeal<br>
           {% endif %}
@@ -144,7 +144,7 @@
 
         <!--Payment summmary-->
         <p class="govuk-body-m">
-          <strong>Payment type: </strong>Non-standard magistrates' - supplemental<br>
+          <strong>Payment type: </strong>Non-standard magistrates - supplemental<br>
           <strong>Date supplemental claim received:</strong> 27 June 2025<br>
            <strong>Caseworker:</strong> {{data['caseworker2']}}
         </p>
@@ -209,7 +209,7 @@
         <!--Payment summmary-->
         <p class="govuk-body-m">
           {% if data['paymentType'] == "Non-standard magistrates'" %}
-            <strong> Payment type: </strong>Non-standard magistrates'<br>
+            <strong> Payment type: </strong>Non-standard magistrates<br>
             {%else %}
             <strong> Payment type: </strong>Assigned counsel<br>
           {% endif %}
@@ -321,7 +321,7 @@
           </table> 
           <!--Payment summmary-->
           <p class="govuk-body-m">
-            <strong>Payment type: </strong>Non-standard magistrates'<br>
+            <strong>Payment type: </strong>Non-standard magistrates<br>
             <strong>Date claim received:</strong> {{data['dateReceived'] or "12 June 2025"}}<br>
             <strong>Caseworker:</strong> {{data['caseworker1']}}
           </p>

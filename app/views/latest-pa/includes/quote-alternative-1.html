@@ -50,8 +50,10 @@
           </dl>
 
 <!--Alt quote 1 - Service cost-->
+        <h4 class="govuk-heading-s">Service cost</h4>
+
           <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Service cost</caption>
+            <caption class="govuk-visually-hidden">Service cost</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -132,9 +134,12 @@
           </table> 
 
  <!--Alt quote 1 - Travel cost-->
+
+          <h4 class="govuk-heading-s">Travel cost</h4>
+
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Travel cost</caption>
             <thead class="govuk-table__head">
-              <caption class="govuk-table__caption govuk-table__caption--m">Travel cost</caption>
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Requested</th>
@@ -177,17 +182,10 @@
           </table> 
 
 <!--Alt quote 1 - Additional cost 1-->
-          <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Additional cost 1</caption>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Description</th>
-                <td class="govuk-table__cell">Mileage, plane ticket, taxi, car parking</td>
-              </tr>
-            </tbody>
-          </table>
+          <h4 class="govuk-heading-s">Additional costs: Mileage, plane ticket, taxi, car parking</h4>
 
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Additional costs: Mileage, plane ticket, taxi, car parking</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -213,15 +211,30 @@
           </table>
 
 <!--Alt quote 1 - Total cost-->
+          <h4 class="govuk-heading-s">Total cost</h4>
+
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Total cost</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Requested</th>
+                {% if data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "Yes" %}
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Allowed</th>
+                {% else %}
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third"></th>
+                {% endif %}
+              </tr>
+            </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total cost</th>
-                <td class="govuk-table__cell"><strong>£650.00</strong></td>
+                <th scope="row" class="govuk-table__header">Total</th>
+                <td class="govuk-table__cell">£650.00</td>
+
                 {% if data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "Yes" %}
-                  <td class="govuk-table__cell govuk-!-width-one-third"><strong>£650.00</strong></td>
+                <td class="govuk-table__cell">£650.00</td>
                 {% else %}
-                  <td class="govuk-table__cell govuk-!-width-one-third"><strong></strong></td>
+                <td class="govuk-table__cell"></td>
                 {% endif %}
               </tr>
             </tbody>

@@ -54,8 +54,10 @@
           </dl>
 
 <!--Primary quote - Service cost-->
+          <h4 class="govuk-heading-s">Service cost</h4>
+
           <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Service cost</caption>
+            <caption class="govuk-visually-hidden">Service cost</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -170,17 +172,11 @@
 
  <!--Primary quote - Travel cost-->
 
-          <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Travel cost</caption>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Reason why travel costs are required</th>
-                <td class="govuk-table__cell">{{data['whyTravel'] or "The service provider lives in a different location"}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <h4 class="govuk-heading-s">Travel cost</h4>
+          <p>Reason: The service provider lives in a different location</p>
 
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Travel cost</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -246,25 +242,15 @@
 
               </tr>
             </tbody>
-          </table> 
+          </table>
 
 <!--Primary quote - Additional cost 1-->
 
-          <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Additional cost 1</caption>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Description</th>
-                <td class="govuk-table__cell">Junior staff rate</td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Reason why additional cost is required</th>
-                <td class="govuk-table__cell">Covers the rate for the junior member of staff supporting the senior expert</td>
-              </tr>
-            </tbody>
-          </table>
+          <h4 class="govuk-heading-s">Additional cost 1: Junior staff rate</h4>
+          <p>Reason: Covers the rate for the junior member of staff supporting the senior expert</p>
 
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Additional cost 1</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -328,25 +314,14 @@
                 {% endif %}
               </tr>
             </tbody>
-          </table> 
-
-<!--Primary quote - Additional cost 2-->
-
-          <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">Additional cost 2</caption>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Description</th>
-                <td class="govuk-table__cell">Administration charge</td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Reason why additional cost is required</th>
-                <td class="govuk-table__cell">Covers the cost of the lab fee</td>
-              </tr>
-            </tbody>
           </table>
 
+<!--Primary quote - Additional cost 2-->
+          <h4 class="govuk-heading-s">Additional cost 2: Administration charge</h4>
+          <p>Reason: Covers the cost of the lab fee</p>
+
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Additional cost 2</caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
@@ -407,25 +382,41 @@
             </tbody>
           </table> 
 
-<!--Primary quote - Total cost-->
+          <h4 class="govuk-heading-s">Total cost</h4>
+
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Total cost</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Details</th>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Requested</th>
+                {% if data['costsAdjusted'] == "Yes" %}
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Allowed</th>
+                {% elseif data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "No" %}
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third">Allowed</th>
+                {% else %}
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third"></th>
+                {% endif %}
+              </tr>
+            </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total cost</th>
-                <td class="govuk-table__cell govuk-!-width-one-third"><strong>£1300.00</strong></td>
+                <th scope="row" class="govuk-table__header">Total</th>
+                <td class="govuk-table__cell">£1300.00</td>
 
                 {% set allowedTotalAdjusted = allowedTotalService + allowedTotalTravel + allowedTotalAdditional1 + allowedTotalAdditional2 %}
 
                 {% if data['costsAdjusted'] == "Yes" %}
-                  <td class="govuk-table__cell govuk-!-width-one-third"><strong>£{{ allowedTotalAdjusted | round(2) }}</strong></td>
+                <td class="govuk-table__cell">£{{ allowedTotalAdjusted | round(2) }}</td>
                 {% elseif data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "No" %}
-                  <td class="govuk-table__cell govuk-!-width-one-third"><strong>£1300.00</strong></td>
+                <td class="govuk-table__cell">£1300.00</td>
                 {% else %}
-                  <td class="govuk-table__cell govuk-!-width-one-third"><strong></strong></td>
-                {% endif%}
+                <td class="govuk-table__cell"></td>
+                {% endif %}
               </tr>
             </tbody>
           </table>
+
 
         </div>
       </div>

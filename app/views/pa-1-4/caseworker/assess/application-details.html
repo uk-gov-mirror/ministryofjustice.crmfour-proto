@@ -1,0 +1,417 @@
+{% extends "layouts/main.html" %}
+{% set version = "pa-1-4" %}
+{% if data['cwAppStatus'] == "In progress"%}
+  {% set activePrimeNav = [true, false, false, false, false] %}
+  {% elseif data['cwAppStatus'] == "Granted" or data['cwAppStatus'] == "Part granted" or data['cwAppStatus'] == "Rejected" or data['cwAppStatus'] == "Expired" or data['cwAppStatus'] == "Auto granted" %}
+    {% set activePrimeNav = [false, false, false, true, false] %}
+  {% elseif data['Appeal'] == "Yes" %}
+    {% set activePrimeNav = [false, false, true, false, false] %}
+  {% else %}
+    {% set activePrimeNav = [false, true, false, false, false] %}
+{% endif %}
+
+{% set activeAppNav = [true, false, false, false, false] %}
+
+{% block header %}
+  {% include version + "/includes/header-cw.html" %}
+{% endblock %}
+
+{% block pageTitle %}
+  {{data['laa-ref'] or "LAA-5a7d3c"}} - Application details – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+{% set bodyClasses = 'caseworker-width' %}
+
+{% block beforeContent %}
+  {% include "/includes/banner.html"%}
+  
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {% include version + "/includes/app-status-cw.html"%}
+      {% include version + "/includes/nav-app-cw.njk"%}
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <h2 class="govuk-heading-l">Overview</h2>
+      
+      {% include version + "/includes/decision-details-cw.html"%}
+
+      <!--App dets-->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h2 class="govuk-summary-card__title">Application details</h2>
+        </div>
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Prison Law
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['prisonLaw'] or "No"}}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                LAA reference
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['laa-ref'] or "LAA-5a7d3c"}}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Unique file number
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['ufn'] or "100323/234234"}}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!---Why PA required-->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h3 class="govuk-summary-card__title" id="review-whypa"> Reason for prior authority</h3>
+        </div>
+        <div class="govuk-summary-card__content">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Why prior authority is required
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['why-pa'] or "My client needs an interpreter" }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Supporting documents
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <a href="">whyPADocs1.pdf</a><br>
+                <a href="">whyPADocs2.pdf</a>
+              </dd>
+            </div>
+          </dl>    
+        </div>
+      </div>
+
+       <!--About the case-->
+      <h2 class="govuk-heading-m">About the case </h2>
+
+      <!--Client details-->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h3 class="govuk-summary-card__title" id="review-client">Client details</h3>
+          <ul class="govuk-summary-card__actions">
+            <li class="govuk-summary-card__action">
+              <!--For the proto make links show as not yet selected until the user does the action
+              {% if data['reviewClient'] == "review" %}
+                <a class="govuk-link" href="review-client?reviewClient=review">Review<span class="govuk-visually-hidden"> client details</span></a>
+                {% else %}
+                <a class="govuk-link--no-visited-state" href="review-client?reviewClient=review">Review<span class="govuk-visually-hidden"> client details</span></a>
+              {% endif %} 
+              -->
+            </li>
+          </ul>
+        </div>
+        <div class="govuk-summary-card__content">
+          {% if data['cwAppStatus'] == "Returned" %}
+            <div class="govuk-inset-text">
+              <strong>Amended by provider</strong>
+            </div>
+          {% endif %}
+          {% if data['fieldClient'] == null or data['fieldClient'] == "" %}
+            {% else %}
+            <div class="govuk-inset-text">
+              <strong>Incorrect information:</strong><br>
+              {{data['fieldClient']}} <br>
+            </div>
+          {% endif %}
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Client name
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['client-first-name'] or "Roger" }} {{data['client-last-name'] or "Blackbeard" }}<br>
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Date of birth
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['client-dob-day'] or "10" }} {{data['client-dob-month'] or "May" }} {{data['client-dob-year'] or "2001" }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!--Case details-->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h3 class="govuk-summary-card__title">Case details</h3>
+          <ul class="govuk-summary-card__actions">
+            <li class="govuk-summary-card__action">
+              <!--For the proto make links show as not yet selected until the user does the action
+              {% if data['reviewCase'] == "review" %}
+                <a class="govuk-link" href="review-case?reviewCase=review">Review<span class="govuk-visually-hidden"> case details</span></a>
+                {% else %}
+                <a class="govuk-link--no-visited-state" href="review-case?reviewCase=review">Review<span class="govuk-visually-hidden"> case details</span></a>
+              {% endif %}
+              --> 
+            </li>
+          </ul>
+        </div>
+        <div class="govuk-summary-card__content">
+           {% if data['fieldCase'] == null or data['fieldCase'] == "" %}
+            {% else %}
+            <div class="govuk-inset-text">
+              <strong>Incorrect information:</strong><br>
+              {{data['fieldCase']}}
+            </div>
+          {% endif %}
+          
+          <dl class="govuk-summary-list">
+            
+            {% if data['prisonLaw'] == "Yes" %}
+              <!--If YES to Prison Law--->
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Subject to POCA
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['poca'] or "Yes" }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Date of next hearing
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['date-hearing-day'] or "23" }} {{data['date-hearing-month'] or "September" }} {{data['date-hearing-year'] or "2024" }}
+                </dd>
+              </div>
+              {% else %}
+              <!--If prison law is NO-->
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Main offence
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['main-offence'] or "Anti-social behaviour orders (for applications made prior to 23rd March 2015)" }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Date of representation order
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['rep-order-day'] or "19" }} {{data['rep-order-month'] or "April" }} {{data['rep-order-year'] or "2023" }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  MAAT ID number
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['maat'] or "12345678" }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Client detained
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {% if data['detained'] == "Yes" %}
+                    {{data['prisons'] or "Belmarsh" }}
+                    {% else %}
+                    No
+                  {% endif %}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Subject to POCA
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['poca'] or "Yes"}}
+                </dd>
+              </div>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+
+      <!--Hearing details-->
+      {% if data['prisonLaw'] == "No" or data['prisonLaw'] == null %}
+        <div class="govuk-summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h3 class="govuk-summary-card__title">Hearing details</h3>
+            <ul class="govuk-summary-card__actions">
+              <li class="govuk-summary-card__action">
+                <!--For the proto make links show as not yet selected until the user does the action
+                {% if data['reviewHearing'] == "review" %}
+                  <a class="govuk-link" href="review-hearing?reviewHearing=review">Review<span class="govuk-visually-hidden"> hearing details</span></a>
+                  {% else %}
+                  <a class="govuk-link--no-visited-state" href="review-hearing?reviewHearing=review">Review<span class="govuk-visually-hidden"> hearing details</span></a>
+                {% endif %} 
+                -->
+              </li>
+            </ul>
+          </div>
+          <div class="govuk-summary-card__content">
+            {% if data['fieldHearing'] == null or data['fieldHearing'] == "" %}
+              {% else %}
+              <div class="govuk-inset-text">
+                <strong>Incorrect information:</strong><br>
+                {{data['fieldHearing']}}
+              </div>
+            {% endif %}
+            <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Date of next hearing
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['date-hearing-day'] or "12"}} {{data['date-hearing-month'] or "July"}} {{data['date-hearing-year'] or "2024"}}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                   Likely or actual plea 
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['plea'] or "Not guilty" }}
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Court type
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data['courtType'] or "Central Criminal Court" }}
+                </dd>
+              </div>
+              {% if data['courtType'] == "Magistrates' court" %}
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Youth court matter
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{data['youthCourt'] or "No"}}
+                  </dd>
+                </div>
+                {% else %}
+                {% if data['courtType'] == null %}
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Psychiatric liaison service accessed
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      {{data['psychLiaison'] or "No"}}
+                    </dd>
+                  </div>
+                  {% if data['psychLiaison'] == "Yes" %}
+                    {% else %}
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">
+                        Why not?
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        {{data['psychmoreDetail'] or "Not required" }}
+                      </dd>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            </div>
+          </dl>
+        </div>
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Contact details</h2>
+      <!--Case contact-->
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+          <h3 class="govuk-summary-card__title">Case contact</h3>
+          <ul class="govuk-summary-card__actions">
+            <li class="govuk-summary-card__action">
+              <!--For the proto make links show as not yet selected until the user does the action
+              {% if data['reviewSolicitor'] == "review" %}
+                <a class="govuk-link" href="review-solicitor?reviewSolicitor=review">Review<span class="govuk-visually-hidden"> your details</span></a>
+                {% else %}
+                <a class="govuk-link--no-visited-state" href="review-solicitor?reviewSolicitor=review">Review<span class="govuk-visually-hidden"> your details</span></a>
+              {% endif %} 
+              -->
+            </li>
+          </ul>
+        </div>
+        <div class="govuk-summary-card__content">
+          {% if data['fieldSolicitor'] == null or data['fieldSolicitor'] == "" %}
+            {% else %}
+            <div class="govuk-inset-text">
+              <strong>Incorrect information:</strong><br>
+              {{data['fieldSolicitor']}}
+            </div>
+          {% endif %}
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Case contact
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['contact-first-name'] or "Jim" }} {{data['contact-last-name'] or "Bowen" }}<br>
+                {{data['contact-email'] or "Jim@Bowen.com" }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Firm details
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data['org-name'] or "Crime Busters Legal" }}<br> 
+                {{data['org-acc'] or "1A3B23E4" }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+     
+      {% include version + "/includes/application-buttons.html"%}
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script>
+    var rate1GeneralTotal = parseInt(document.getElementById("rate1GeneralTotal").value) | 0
+    var rate2GeneralTotal = parseInt(document.getElementById("rate2GeneralTotal").value) | 0
+    var actualTravelTotal = parseInt(document.getElementById("actualTravelTotal").value) | 0
+    var actualAdd1Total = parseInt(document.getElementById("actualAdd1Total").value) | 0
+    var actualGeneralTotal = parseInt(document.getElementById("actualGeneralTotal").value) | 0
+    var allowedTotalCost = parseInt(document.getElementById("allowedTotalCost").value) | 0
+
+    window.onload = function(){  
+      allowedTotalCost = actualTravelTotal + actualAdd1Total + rate1GeneralTotal + rate2GeneralTotal;
+      document.getElementById("showallowedTotalCost").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("showallowedTotalCost2").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("showallowedTotalCost3").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("allowedTotalCost").value = Number(allowedTotalCost).toFixed(2);
+    }
+  </script>
+{% endblock %}

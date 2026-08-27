@@ -1,0 +1,195 @@
+{% extends "layouts/main.html" %}
+{% set version = "pa-1-4" %}
+{% if data['cwAppStatus'] == "In progress"%}
+  {% set activePrimeNav = [true, false, false, false, false] %}
+  {% elseif data['cwAppStatus'] == "Granted" or data['cwAppStatus'] == "Part granted" or data['cwAppStatus'] == "Rejected" or data['cwAppStatus'] == "Expired" or data['cwAppStatus'] == "Auto granted" %}
+    {% set activePrimeNav = [false, false, false, true, false] %}
+  {% elseif data['Appeal'] == "Yes" %}
+    {% set activePrimeNav = [false, false, true, false, false] %}
+  {% else %}
+    {% set activePrimeNav = [false, true, false, false, false] %}
+{% endif %}
+{% set activeAppNav = [false, true, false, false, false] %}
+
+{% block header %}
+  {% include version + "/includes/header-cw.html" %}
+{% endblock %}
+
+{% block pageTitle %}
+  {{data['laa-ref'] or "LAA-5a7d3c"}} - Application details – {{ serviceName }} – GOV.UK Prototype Kit
+{% endblock %}
+
+
+
+{% block beforeContent %}
+  {% include "includes/banner.html"%}
+  
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .guidance-panel {
+        border-left-color: #1d70b8;
+        background-color: #eaf4f9;
+    }
+</style>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {% include version + "/includes/app-status-cw.html"%}
+    {% include version + "/includes/nav-app-cw.njk"%}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h2 class="govuk-heading-l" id="allowedCosts">Quotes</h2>
+
+    <!--Decision and reason panel-->
+    <!--If rejected-->
+    {% if data['quoteGranted'] == "Rejected" %}
+    <form class="form" action="send-confirmation?cwAppStatus=Rejected&Appeal=No" method="post">
+      
+      {% call govukInsetText({ classes: "govuk-!-margin-20 guidance-panel" }) %}
+        <h4 class="govuk-heading-s govuk-!-margin-0">LAA decision: Rejected</h4><br>
+        <h5 class="govuk-heading-s govuk-!-margin-0">Reason</h5>
+        <p>{{data['moreDetail'] or "I am rejecting this claim because the correct form has not been used." }}</p>
+        {% if data['cwAppStatus'] == "In progress"%}
+        <div class="govuk-button-group">
+          <button type="submit" class="govuk-button" data-module="govuk-button">
+            Submit decision
+          </button>
+          <a href="application-details-adjust?laa-ref=LAA-1z5f7w&cwAppStatus=In%20progress&Appeal=No&quoteGranted=No&costsAdjusted=No" class="govuk-link govuk-link--no-visited-state">Cancel decision</a>
+        </div>
+        {% else %}
+        {% endif %}
+      {% endcall %}
+    </form>
+    {% else %}
+    {% endif %}
+
+    {% include version + "/includes/adjust-info.html"%}
+
+    <!--Selected quote header with decision and reason panel-->
+    <!--If adjusted primary costs-->
+    {% if data['costsAdjusted'] == "Yes" %}
+    <form class="form" action="send-confirmation?cwAppStatus=Part%20granted&Appeal=No" method="post">
+      <h3 class="govuk-heading-m" id="selectedQuote">Selected quote</h3>
+
+      {% call govukInsetText({ classes: "govuk-!-margin-20 guidance-panel" }) %}
+        <h4 class="govuk-heading-s govuk-!-margin-0">LAA decision: Part granted</h4><br>
+        <h5 class="govuk-heading-s govuk-!-margin-0">Reason</h5>
+        <p>{{data['serviceAdjustField'] or "Adjusted to London rates. I adjusted the service cost to match the current London rates. The additional cost was adjusted to London rates." }}</p>
+        {% if data['cwAppStatus'] == "In progress"%}
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Submit decision
+        </button>
+        {% else %}
+        {% endif %}
+      {% endcall %}
+    </form>
+    <!--If full grant primary-->
+    {% elseif data['quoteGranted'] == "Yes" and data ['alternativeQuote'] == "No" %}
+    <form class="form" action="send-confirmation?cwAppStatus=Granted&Appeal=No" method="post">
+      <h3 class="govuk-heading-m" id="selectedQuote">Selected quote</h3>
+
+      {% call govukInsetText({ classes: "govuk-!-margin-20 guidance-panel" }) %}
+        <h4 class="govuk-heading-s govuk-!-margin-0">LAA decision: Granted</h4><br>
+      {% if data.moreDetail %}
+        <h5 class="govuk-heading-s govuk-!-margin-0">Reason</h5>
+        <p>{{data['moreDetail'] }}</p>
+      {% else %}<!--Hides 'reason' if no reason entered-->
+      {% endif %}
+        {% if data['cwAppStatus'] == "In progress"%}
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Submit decision
+        </button>
+        {% else %}
+        {% endif %}
+      {% endcall %}
+    </form>
+
+    <!--If full grant alternative-->
+    {% elseif data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "Yes" %}
+    <form class="form" action="send-confirmation?cwAppStatus=Part%20granted&Appeal=No" method="post">
+      <h3 class="govuk-heading-m" id="selectedQuote">Selected quote</h3>
+
+      {% call govukInsetText({ classes: "govuk-!-margin-20 guidance-panel" }) %}
+        <h4 class="govuk-heading-s govuk-!-margin-0">LAA decision: Part granted</h4><br>
+        <h5 class="govuk-heading-s govuk-!-margin-0">Reason</h5>
+        <p>{{data['moreDetail'] or "Alternative quote 1 selected because it was better overall value for LAA compared to primary quote." }}</p>
+        {% if data['cwAppStatus'] == "In progress"%}
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Submit decision
+        </button>
+        {% else %}
+        {% endif %}
+      {% endcall %}
+    </form>
+
+    <!--If Alt Quote 1 is granted, display Alt Quote 1 at top of page under Selected quote header -->
+    {% include version + "/includes/quote-alternative-1.html"%}
+
+    {% else %}
+    {% endif %}
+
+    <!--Primary quote-->
+    <!--Hide primary quote if an alternative quote is granted-->
+    {% if data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "Yes" %}
+    {% else %}
+    <!--Otherwise display primary quote at top of the page-->
+      {% include version + "/includes/quote-primary.html"%}
+    {% endif %}
+    
+    {% if data['costsAdjusted'] == "Yes" or data['quoteGranted'] == "Yes" %}
+      <h3 class="govuk-heading-m" id="selectedQuote">Other quotes</h3>    
+      {% else %}
+    {% endif %}
+
+  <!--If no alternative quotes are provided-->
+  {% if data['altQuoteProvided'] == "No" %}
+    {% include version + "/includes/no-alternative-quote.html"%}
+  <!--Otherwise display alternative quotes-->
+  {% else %}
+
+    <!--Display primary quote under Other quotes header if alternative quote is granted-->
+    {% if data['quoteGranted'] == "Yes" and data['alternativeQuote'] == "Yes" %}
+      {% include version + "/includes/quote-primary.html"%}
+    {% else %}
+    <!--Otherwise display alt quote 1-->
+      {% include version + "/includes/quote-alternative-1.html"%}
+    {% endif %}
+
+    <!--Alternative quote 2-->
+    {% include version + "/includes/quote-alternative-2.html"%}
+
+  {% endif %}
+
+    <!--Application buttons-->
+    {% include version + "/includes/application-buttons.html"%}
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script>
+    var rate1GeneralTotal = parseFloat(document.getElementById("rate1GeneralTotal").value) | 0
+    var rate2GeneralTotal = parseFloat(document.getElementById("rate2GeneralTotal").value) | 0
+    var actualTravelTotal = parseFloat(document.getElementById("actualTravelTotal").value) | 0
+    var actualAdd1Total = parseFloat(document.getElementById("actualAdd1Total").value) | 0
+    var actualGeneralTotal = parseFloat(document.getElementById("actualGeneralTotal").value) | 0
+    var allowedTotalCost = parseFloat(document.getElementById("allowedTotalCost").value) | 0
+
+    window.onload = function(){  
+      allowedTotalCost = actualTravelTotal + actualAdd1Total + rate1GeneralTotal + rate2GeneralTotal;
+      document.getElementById("showallowedTotalCost").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("showallowedTotalCost2").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("showallowedTotalCost3").innerHTML = Number(allowedTotalCost).toFixed(2);
+      document.getElementById("allowedTotalCost").value = (allowedTotalCost);
+    }
+  </script>
+{% endblock %}
